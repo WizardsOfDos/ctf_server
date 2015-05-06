@@ -31,7 +31,7 @@
       <ul class="nav navbar-nav">
         <li {% if is_index %} class="active" {% endif %}><a href="/">Challenges</a></li>
         <li {% if is_ranking %} class="active" {% endif %}><a href="{% url 'challenges:ranking' %}">Rankings</a></li>
-        {% if username %}
+        {% if user.allow_create %}
             <li {% if is_mychallenges %} class="active" {% endif %}>
                 <a href="{% url 'challenges:myChallenges' %}">My Challenges</a>
             </li>
