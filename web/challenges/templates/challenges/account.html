@@ -30,4 +30,16 @@
 </ul>
 {% endif %}
 
+{% if own_account %}
+<h4>My Challenges</h4>
+{% else %}
+<h4>{{ shown_username }}'s Challenges</h4>
+{% endif %}
+
+<ul class="table">
+    {% for c in created_challenges %}
+        <li><a href="{% url 'challenges:info' c.id %}">{{ c.name }}</a></li>
+    {% endfor %}
+</ul>
+
 {% endblock %}

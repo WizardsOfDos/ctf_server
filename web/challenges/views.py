@@ -126,6 +126,13 @@ def showAccount(request, user_id):
         if user == shown_user:
             context['own_account'] = True
 
+    challenges = Challenge.objects.all()
+    context['created_challenges'] = []
+    for challenge in challenges:
+        if challenge.author.authuser.get_username() == shown_user.authuser.get_username():
+            c = {"id": challenge.id, "name": challenge.name}
+            context['created_challenges'].append(c)
+
     return render(request, 'challenges/account.html', context)
 
 
@@ -226,5 +233,4 @@ def createAccount(request):
     context['form'] = form
 
     return render(request, 'challenges/createAccount.html', context)
-
 
