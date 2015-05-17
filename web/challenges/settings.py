@@ -10,4 +10,9 @@ If enabled:
 """
 PRESENTATION_MODE = False
 
+"""
+Disable the creation of new users and only show challenges etc. to logged in users.
+"""
+RESTRICTED_MODE = False
+
 HOST_NAME = 'localhost'

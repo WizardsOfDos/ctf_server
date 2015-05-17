@@ -13,6 +13,22 @@ from challenges.forms import InfoForm, CreateChallengeForm, EditChallengeForm, E
 
 from challenges import backend, settings
 
+def maybe_login_required(f):
+    if settings.RESTRICTED_MODE:
+        return login_required(f, login_url="challenges:login")
+    else:
+        return f
+
+
+def maybe_forbidden(f):
+    if settings.RESTRICTED_MODE:
+        def forbidden(*args, **kwargs):
+            raise exceptions.PermissionDenied()
+        return forbidden
+    else:
+        return f
+
+
 def standardContext(request):
     context = {}
     if request.user.is_authenticated():
@@ -24,6 +40,7 @@ def standardContext(request):
     return context
 
 
+@maybe_login_required
 def index(request):
     context = standardContext(request)
     context['is_index'] = True
@@ -68,6 +85,7 @@ def info_test_form(request, challenge, form, context):
     return context
 
 
+@maybe_login_required
 def info(request, challenge_id):
     context = standardContext(request)
     challenge = get_object_or_404(Challenge, pk=challenge_id)
@@ -96,6 +114,7 @@ def info(request, challenge_id):
     return render(request, 'challenges/info.html', context)
 
 
+@maybe_login_required
 def ranking(request):
     context = standardContext(request)
     context['is_ranking'] = True
@@ -115,6 +134,7 @@ def myChallenges(request):
     return render(request, 'challenges/myChallenges.html', context)
 
 
+@maybe_login_required
 def showAccount(request, user_id):
     context = standardContext(request)
     shown_user = get_object_or_404(User, pk=user_id)
@@ -216,6 +236,7 @@ def editAccount(request):
     return render(request, 'challenges/editAccount.html', context)
 
 
+@maybe_forbidden
 def createAccount(request):
     if request.user.is_authenticated():
         return redirect("challenges:index")
