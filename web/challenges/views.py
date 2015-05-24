@@ -76,7 +76,7 @@ def info_test_form(request, challenge, form, context):
             context['success_msg'] = "Success!"
             if request.user.is_authenticated():
                 user = User.from_authuser(request.user)
-                if user != challenge.author:
+                if user != challenge.author and not user.has_solved(challenge):
                     challenge.set_solved(user)
         else:
             context['error_msg'] = "Sorry, wrong solution..."
